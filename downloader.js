@@ -15,7 +15,7 @@ if(!fs.existsSync(dirOut)) fs.mkdirSync(dirOut);
 if(!fs.existsSync(dirTemp)) fs.mkdirSync(dirTemp);
 
 const filenameClean = name => {
-  return name.replace(/[~"#%&*:<>?/\\{|}]+/gi, ''); // Strip any special charactere
+  return name.replace(/[~"#%&*:<>?/\\{|}()]+/gi, ''); // Strip any special charactere
 };
 
 (async () => {
@@ -32,7 +32,9 @@ const filenameClean = name => {
     }
 
     // Check for existing & make output dir.
-    const dirArtist = path.join(dirOut, filenameClean(song.artist || song.album || 'Unknown Artist'));
+    let nameArtist = filenameClean(song.artist || song.album || 'Unknown Artist');
+    if(nameArtist.endsWith('.')) nameArtist = nameArtist.substr(0, nameArtist.length - 1);
+    const dirArtist = path.join(dirOut, nameArtist);
     const fileOut = path.join(dirArtist, filenameClean(song.title) + '.mp3');
     if(fs.existsSync(fileOut)) continue;
 
