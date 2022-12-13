@@ -94,11 +94,10 @@ const filenameClean = name => {
         ;
       }
       
-      strm = strm.outputOptions('-id3v2_version', '3')
-        .outputOptions('-metadata', 'title=' + song.title)
-        .outputOptions('-metadata', 'artist=' + song.artist)
-        .outputOptions('-metadata', 'album=' + song.album)
-      ;
+      strm = strm.outputOptions('-id3v2_version', '3').outputOptions('-metadata', 'title=' + song.title);
+      if(song.artist) strm = strm.outputOptions('-metadata', 'artist=' + song.artist);
+      if(song.album) strm = strm.outputOptions('-metadata', 'album=' + song.album);
+
       strm.save(fileOut);
       strm.on('end', resolve);
       strm.on('error', (...args) => {
