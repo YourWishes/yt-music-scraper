@@ -5,6 +5,7 @@ const fetch = require('cross-fetch');
 const ytdl = require('ytdl-core');
 
 const data = JSON.parse(fs.readFileSync('songs.json', 'utf-8'));
+const ignore = fs.readFileSync('ignore.txt', 'utf-8').split('\r').join('\n').split('\n').filter(t => t && t.replace(/\s/g, '').length);
 
 const dirOut = path.resolve('music');
 const dirTemp = path.resolve('temp');
@@ -25,10 +26,7 @@ const filenameClean = name => {
     const ytId = id.split('v=')[1].split('&')[0];
 
     // Skip unavailable songs
-    if([
-      'G4spBKeErkE',
-      'ypT-bu75qlk'
-    ].some(j => j == ytId)) {
+    if(ignore.some(j => j == ytId)) {
       console.log('Skipping gone song', id);
       continue;
     }
